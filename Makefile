@@ -6,9 +6,12 @@ OCAMLOPT := ocamlopt
 OCAMLOPT_OPTS := -warn-error +A -annot
 OCAMLOPT_LINK :=
 
-sources := main.ml
+OCAMLLEX := ocamllex
+OCAMLYACC := menhir
 
-ml_files := $(filter %.ml, $(sources))
+sources := ast.ml lexer.mll main.ml
+
+ml_files := $(filter %.ml, $(sources:.mll=.ml))
 cmo_files := $(ml_files:.ml=.cmo)
 cmx_files := $(ml_files:.ml=.cmx)
 
@@ -33,6 +36,9 @@ native: $(cmx_files)
 .PHONY: bytecode
 bytecode: $(cmo_files)
 	$(OCAMLC) -o $(result) $(OCAMLC_OPTS) $(OCAMLC_LINK) $(cmo_files)
+
+lexer.ml: lexer.mll
+	$(OCAMLLEX) $<
 
 .PHONY: clean
 clean:
