@@ -7,3 +7,6 @@
 *.annot
 rue
 .depend
+lexer.ml
+parser.ml
+parser.mli
