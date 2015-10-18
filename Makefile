@@ -9,13 +9,15 @@ OCAMLOPT_LINK :=
 OCAMLLEX := ocamllex
 OCAMLYACC := menhir
 
-sources := ast.ml lexer.mll main.ml
+SOURCES := ast.ml lexer.mll main.ml parser.mly
 
-ml_files := $(filter %.ml, $(sources:.mll=.ml))
-cmo_files := $(ml_files:.ml=.cmo)
-cmx_files := $(ml_files:.ml=.cmx)
+RESULT := rue
 
-result := rue
+MLLS := $(filter %.mll, $(SOURCES))
+MLYS := $(filter %.mly, $(SOURCES))
+MLS := $(filter %.ml, $(SOURCES)) $(MLLS:.mll=.ml) $(MLYS:.mly=.ml)
+OBJS := $(MLS:.ml=.cmo)
+OBJSOPT := $(MLS:.ml=.cmx)
 
 %.cmi: %.mli
 	$(OCAMLC) -c $(OCAMLC_OPTS) $<
@@ -26,26 +28,42 @@ result := rue
 %.cmx: %.ml
 	$(OCAMLOPT) -c $(OCAMLOPT_OPTS) $<
 
+%.ml: %.mll
+	$(OCAMLLEX) $<
+
+%.ml: %.mly
+	$(OCAMLYACC) $<
+
 .PHONY: all
 all: native
 
 .PHONY: native
-native: $(cmx_files)
-	$(OCAMLOPT) -o $(result) $(OCAMLOPT_OPTS) $(OCAMLOPT_LINK) $(cmx_files)
+native: .depend $(OBJSOPT)
+	$(OCAMLOPT) -o $(RESULT) $(OCAMLOPT_OPTS) $(OCAMLOPT_LINK) $(OBJSOPT)
 
 .PHONY: bytecode
-bytecode: $(cmo_files)
-	$(OCAMLC) -o $(result) $(OCAMLC_OPTS) $(OCAMLC_LINK) $(cmo_files)
-
-lexer.ml: lexer.mll
-	$(OCAMLLEX) $<
+bytecode: .depend $(OBJS)
+	$(OCAMLC) -o $(RESULT) $(OCAMLC_OPTS) $(OCAMLC_LINK) $(OBJS)
 
 .PHONY: clean
 clean:
-	rm -f *.cma *.cmxa *.cmo *.cmi *.annot *.cmx *.o *.a $(result)
+	rm -f \
+	  *.cma \
+	  *.cmxa \
+	  *.cmo \
+	  *.cmi \
+	  *.annot \
+	  *.cmx \
+	  *.o \
+	  *.a \
+	  .depend \
+	  $(MLLS:.mll=.ml) \
+	  $(MLYS:.mly=.ml) \
+	  $(MLYS:.mly=.mli) \
+	  $(RESULT)
 
-.depend: $(sources)
-	ocamldep $(sources) >.depend
+.depend: $(MLS)
+	ocamldep $(MLS) >.depend
 
 ifneq ($(MAKECMDGOALS), clean)
   -include .depend
