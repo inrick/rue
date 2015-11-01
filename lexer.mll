@@ -8,6 +8,14 @@ type token =
   | EOF
 
 exception Syntax_error of string
+
+let to_string =
+  let open Printf in
+  function
+  | LPAR -> "LPAR"
+  | RPAR -> "RPAR"
+  | INT d  -> sprintf "INT(%d)" d
+  | EOF -> "EOF"
 }
 
 let digit = ['0'-'9']
