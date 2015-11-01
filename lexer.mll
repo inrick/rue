@@ -1,6 +1,5 @@
 {
-open Lexing
-open Parsing
+module L = Lexing
 
 type token =
   | LPAR
@@ -9,13 +8,6 @@ type token =
   | EOF
 
 exception Syntax_error of string
-
-let next_line lexbuf =
-  let pos = lexbuf.lex_curr_p in
-  lexbuf.lex_curr_p <-
-    { pos with
-      pos_bol = lexbuf.lex_curr_pos;
-      pos_lnum = pos.pos_lnum + 1 }
 }
 
 let digit = ['0'-'9']
@@ -27,9 +19,9 @@ let id = ['A'-'Z' 'a'-'z' '_']['A'-'Z' 'a'-'z' '_' '0'-'9']*
 
 rule read = parse
   | ws { read lexbuf }
-  | nl { next_line lexbuf; read lexbuf }
-  | int { INT (int_of_string (lexeme lexbuf)) }
+  | nl { L.new_line lexbuf; read lexbuf }
+  | int { INT (int_of_string (L.lexeme lexbuf)) }
   | '(' { LPAR }
   | ')' { RPAR }
-  | _ { raise (Syntax_error ("Unknown character:" ^ lexeme lexbuf)) }
+  | _ { raise (Syntax_error ("Unknown character:" ^ L.lexeme lexbuf)) }
   | eof { EOF }
