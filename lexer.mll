@@ -33,3 +33,11 @@ rule read = parse
   | ')' { RPAR }
   | _ { raise (Syntax_error ("Unknown character:" ^ L.lexeme lexbuf)) }
   | eof { EOF }
+
+{
+let tokens lexbuf =
+  let rec go xs = function
+    | EOF -> List.rev (EOF :: xs)
+    | x -> go (x :: xs) (read lexbuf) in
+  go [] (read lexbuf)
+}
