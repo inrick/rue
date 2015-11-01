@@ -9,13 +9,13 @@ OCAMLOPT_LINK :=
 OCAMLLEX := ocamllex
 OCAMLYACC := menhir
 
-SOURCES := ast.ml lexer.mll main.ml parser.mly
+SOURCES := lexer.mll parser.mly ast.ml main.ml
 
 RESULT := rue
 
 MLLS := $(filter %.mll, $(SOURCES))
 MLYS := $(filter %.mly, $(SOURCES))
-MLS := $(filter %.ml, $(SOURCES)) $(MLLS:.mll=.ml) $(MLYS:.mly=.ml)
+MLS := $(MLLS:.mll=.ml) $(MLYS:.mly=.ml) $(filter %.ml, $(SOURCES))
 OBJS := $(MLS:.ml=.cmo)
 OBJSOPT := $(MLS:.ml=.cmx)
 
