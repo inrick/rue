@@ -13,11 +13,14 @@ SOURCES := lexer.mll parser.mly ast.ml main.ml
 
 RESULT := rue
 
-MLLS := $(filter %.mll, $(SOURCES))
-MLYS := $(filter %.mly, $(SOURCES))
-MLS := $(MLLS:.mll=.ml) $(MLYS:.mly=.ml) $(filter %.ml, $(SOURCES))
+MLSTMP1 := $(SOURCES:.mll=.ml)
+MLSTMP2 := $(MLSTMP1:.mly=.ml)
+MLS := $(filter %.ml, $(MLSTMP2))
 OBJS := $(MLS:.ml=.cmo)
 OBJSOPT := $(MLS:.ml=.cmx)
+
+MLLS := $(filter %.mll, $(SOURCES))
+MLYS := $(filter %.mly, $(SOURCES))
 
 %.cmi: %.mli
 	$(OCAMLC) -c $(OCAMLC_OPTS) $<
