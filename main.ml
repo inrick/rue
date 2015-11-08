@@ -14,7 +14,16 @@ let lex_and_print =
     >> String.concat " "
     >> print_endline
 
+let parse = Lexing.from_channel >> Parser.expropt Lexer.read
+
+let eval_and_print =
+  Option.maybe 0 Ast.eval
+    >> string_of_int
+    >> print_endline
+
 let () =
   match Sys.argv with
   | [|_; "-h"|] -> usage 0
-  | _ -> lex_and_print stdin
+  | [|_; "lex"|] -> lex_and_print stdin
+  | [|_; "eval"|] -> parse stdin |> eval_and_print
+  | _ -> parse stdin |> Ast.print

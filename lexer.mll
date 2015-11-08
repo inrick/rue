@@ -9,7 +9,10 @@ let to_string =
   function
   | LPAR -> "LPAR"
   | RPAR -> "RPAR"
-  | INT d  -> sprintf "INT(%d)" d
+  | INT d -> sprintf "INT(%d)" d
+  | EXCL -> "EXCL"
+  | MULT -> "MULT"
+  | PLUS -> "PLUS"
   | EOF -> "EOF"
 }
 
@@ -26,6 +29,9 @@ rule read = parse
   | int { INT (int_of_string (L.lexeme lexbuf)) }
   | '(' { LPAR }
   | ')' { RPAR }
+  | '!' { EXCL }
+  | '+' { PLUS }
+  | '*' { MULT }
   | _ { raise (Syntax_error ("Unknown character:" ^ L.lexeme lexbuf)) }
   | eof { EOF }
 
