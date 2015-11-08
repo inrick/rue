@@ -9,7 +9,7 @@ OCAMLOPT_LINK :=
 OCAMLLEX := ocamllex
 OCAMLYACC := menhir
 
-SOURCES := util.ml lexer.mll parser.mly ast.ml main.ml
+SOURCES := util.ml parser.mly lexer.mll ast.ml main.ml
 
 RESULT := rue
 

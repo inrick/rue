@@ -1,11 +1,6 @@
 {
+open Parser
 module L = Lexing
-
-type token =
-  | LPAR
-  | RPAR
-  | INT of int
-  | EOF
 
 exception Syntax_error of string
 
