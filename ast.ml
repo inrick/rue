@@ -23,11 +23,10 @@ type expr =
 
 module String = struct
   let rec of_lit = function
-    | Int d -> P.sprintf "Int(%d)" d
+    | Int d -> string_of_int d
     | Array xs ->
         List.map string_of_int xs
         |> String.concat " "
-        |> P.sprintf "Array(%s)"
 
   let of_unop = function
     | Enum -> "!"
