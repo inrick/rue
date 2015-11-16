@@ -1,5 +1,7 @@
 let (>>) f g x = f x |> g
 
+let flip f = fun x y -> f y x
+
 let range i j =
   let rec go ns = function
     | k when k < i -> ns
