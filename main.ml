@@ -14,12 +14,15 @@ let lex_and_print =
     >> String.concat " "
     >> print_endline
 
-let parse = Lexing.from_channel >> Parser.expropt Lexer.read
+let parse =
+  Lexing.from_channel
+  >> Parser.expropt Lexer.read
+  >> Option.map Ast.normalize
 
-let eval_and_print =
-  Option.maybe 0 Ast.eval
-    >> string_of_int
-    >> print_endline
+let eval_and_print = Ast.(
+  Option.maybe (Int 0) eval
+    >> string_of_lit
+    >> print_endline)
 
 let () =
   match Sys.argv with

@@ -11,7 +11,10 @@ let to_string =
   | RPAR -> "RPAR"
   | INT d -> sprintf "INT(%d)" d
   | EXCL -> "EXCL"
+  | MINUS -> "MINUS"
   | MULT -> "MULT"
+  | PERCENT -> "PERCENT"
+  | PIPE -> "PIPE"
   | PLUS -> "PLUS"
   | EOF -> "EOF"
 }
@@ -30,8 +33,11 @@ rule read = parse
   | '(' { LPAR }
   | ')' { RPAR }
   | '!' { EXCL }
-  | '+' { PLUS }
+  | '-' { MINUS }
   | '*' { MULT }
+  | '|' { PIPE }
+  | '+' { PLUS }
+  | '%' { PERCENT }
   | _ { raise (Syntax_error ("Unknown character:" ^ L.lexeme lexbuf)) }
   | eof { EOF }
 
