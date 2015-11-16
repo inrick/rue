@@ -22,4 +22,10 @@ module Option = struct
   let maybe default f = function
     | Some x -> f x
     | None -> default
+
+  let (>>=) x f = match x with
+    | Some y -> f y
+    | None -> None
+
+  let return x = Some x
 end
