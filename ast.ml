@@ -21,32 +21,32 @@ type expr =
   | Unop of unop * expr
   | Binop of expr * binop * expr
 
-let rec string_of_lit = function
-  | Int d -> P.sprintf "Int(%d)" d
-  | Array xs ->
-      List.map string_of_int xs
-      |> String.concat " "
-      |> P.sprintf "Array(%s)"
+module String = struct
+  let rec of_lit = function
+    | Int d -> P.sprintf "Int(%d)" d
+    | Array xs ->
+        List.map string_of_int xs
+        |> String.concat " "
+        |> P.sprintf "Array(%s)"
 
-let string_of_unop = function
-  | Enum -> "!"
-  | Flip -> "+"
-  | Rev -> "|"
+  let of_unop = function
+    | Enum -> "!"
+    | Flip -> "+"
+    | Rev -> "|"
 
-let string_of_binop = function
-  | Divide -> "%"
-  | Mult -> "*"
-  | Minus -> "-"
-  | Plus -> "+"
+  let of_binop = function
+    | Divide -> "%"
+    | Mult -> "*"
+    | Minus -> "-"
+    | Plus -> "+"
 
-let rec to_string = function
-  | Lit x -> P.sprintf "Lit(%s)" (string_of_lit x)
-  | Unop (op, e) -> P.sprintf "Unop(%s, %s)" (string_of_unop op) (to_string e)
-  | Binop (e1, op, e2) ->
-      P.sprintf "Binop(%s, %s, %s)"
-        (to_string e1) (string_of_binop op) (to_string e2)
-
-let print = Option.maybe "no expression" to_string >> print_endline
+  let rec of_expr = function
+    | Lit x -> P.sprintf "Lit(%s)" (of_lit x)
+    | Unop (op, e) -> P.sprintf "Unop(%s, %s)" (of_unop op) (of_expr e)
+    | Binop (e1, op, e2) ->
+        P.sprintf "Binop(%s, %s, %s)"
+          (of_expr e1) (of_binop op) (of_expr e2)
+end
 
 let rec normalize = function
   | Lit (Array [x]) -> Lit (Int x)
