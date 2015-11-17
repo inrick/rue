@@ -10,20 +10,16 @@ let usage exit_code =
 
 let lex =
   Lexer.tokens
-  >> List.map Lexer.to_string
-  >> String.concat " "
+    >> List.map Lexer.to_string
+    >> String.concat " "
 let lex_ch = Lexing.from_channel >> lex
 let lex_string = Lexing.from_string >> lex
 
 let parse =
   Parser.expropt Lexer.read
-  >> Option.map Ast.normalize
-
-let parse_ch =
-  Lexing.from_channel >> parse
-
-let parse_string =
-  Lexing.from_string >> parse
+    >> Option.map Ast.normalize
+let parse_ch = Lexing.from_channel >> parse
+let parse_string = Lexing.from_string >> parse
 
 let eval_and_print = Ast.(
   Option.maybe (Int 0) eval
@@ -37,8 +33,8 @@ let () =
   | [|_; "eval"|] -> parse_ch stdin |> eval_and_print
   | [|_; "parse"|] ->
       parse_ch stdin
-      |> Option.map Ast.String.of_expr
-      |> Option.iter print_endline
+        |> Option.map Ast.String.of_expr
+        |> Option.iter print_endline
   | _ ->
       print_endline version_str;
       try
