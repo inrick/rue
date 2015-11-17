@@ -8,12 +8,12 @@ let usage exit_code =
   print_endline version_str;
   exit exit_code
 
-let lex_and_print =
-  Lexing.from_channel
-    >> Lexer.tokens
-    >> List.map Lexer.to_string
-    >> String.concat " "
-    >> print_endline
+let lex =
+  Lexer.tokens
+  >> List.map Lexer.to_string
+  >> String.concat " "
+let lex_ch = Lexing.from_channel >> lex
+let lex_string = Lexing.from_string >> lex
 
 let parse =
   Parser.expropt Lexer.read
@@ -33,7 +33,7 @@ let eval_and_print = Ast.(
 let () =
   match Sys.argv with
   | [|_; "-h"|] -> usage 0
-  | [|_; "lex"|] -> lex_and_print stdin
+  | [|_; "lex"|] -> lex_ch stdin |> print_endline
   | [|_; "eval"|] -> parse_ch stdin |> eval_and_print
   | [|_; "parse"|] ->
       parse_ch stdin
