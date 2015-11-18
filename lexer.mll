@@ -38,7 +38,7 @@ rule read = parse
   | '|' { PIPE }
   | '+' { PLUS }
   | '%' { PERCENT }
-  | _ { raise (Syntax_error ("Unknown character:" ^ L.lexeme lexbuf)) }
+  | _ { raise (Syntax_error ("Unknown character: " ^ L.lexeme lexbuf)) }
   | eof { EOF }
 
 {
