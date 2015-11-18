@@ -40,7 +40,11 @@ let repl () =
       | "\\h" -> "Known commands: \\e, \\l, \\p, \\h"
       | _ -> "Unknown command: " ^ s
     else
-      !handler s
+      try !handler s with
+      | Lexer.Syntax_error err -> err
+      | Parser.Error -> "Parse error"
+      | Division_by_zero -> "Division by zero"
+      | Stack_overflow -> "Stack overflow"
   in
   print_endline version_str;
   print_endline "\\h for help";
