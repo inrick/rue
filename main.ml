@@ -8,22 +8,15 @@ let usage exit_code =
   print_endline version_str;
   exit exit_code
 
-let lex =
-  Lexer.tokens
-    >> List.map Lexer.to_string
-    >> String.concat " "
+let lex = Lexer.tokens >> List.map Lexer.to_string >> String.concat " "
 let lex_ch = Lexing.from_channel >> lex
 let lex_string = Lexing.from_string >> lex
 
-let parse =
-  Parser.expropt Lexer.read
-    >> Option.map Ast.normalize
+let parse = Parser.expropt Lexer.read >> Option.map Ast.normalize
 let parse_ch = Lexing.from_channel >> parse
 let parse_string = Lexing.from_string >> parse
 
-let eval = Ast.(
-  Option.maybe (Int 0) eval
-    >> String.of_lit)
+let eval = Ast.(Option.maybe (Int 0) eval >> String.of_lit)
 
 let repl () =
   (* input handlers *)
@@ -53,8 +46,7 @@ let repl () =
       output_string stdout "> ";
       read_line () |> hook |> print_endline
     done
-  with
-  | End_of_file -> exit 0
+  with End_of_file -> exit 0
 
 let () =
   match Sys.argv with
