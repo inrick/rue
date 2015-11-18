@@ -54,6 +54,7 @@ let repl () =
 
 let () =
   match Sys.argv with
+  | [|_|] -> repl ()
   | [|_; "-h"|] -> usage 0
   | [|_; "lex"|] -> lex_ch stdin |> print_endline
   | [|_; "eval"|] -> parse_ch stdin |> eval |> print_endline
@@ -61,4 +62,4 @@ let () =
       parse_ch stdin
         |> Option.map Ast.String.of_expr
         |> Option.iter print_endline
-  | _ -> repl ()
+  | _ -> usage 1
