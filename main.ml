@@ -40,8 +40,7 @@ let () =
       try
         while true do
           output_string stdout "> ";
-          flush stdout;
-          input_line stdin |> parse_string |> eval_and_print
+          read_line () |> parse_string |> eval_and_print
         done
       with
       | End_of_file -> exit 0
