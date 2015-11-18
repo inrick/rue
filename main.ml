@@ -25,21 +25,32 @@ let eval = Ast.(
   Option.maybe (Int 0) eval
     >> String.of_lit)
 
-(* toplevel handlers *)
-let eval_input = parse_string >> eval
-let lex_input = lex_string
-let parse_input = parse_string >> Option.maybe "" Ast.String.of_expr
-let handler = ref eval_input
-let toplevel_hook s =
-  if s.[0] = '\\' then
-    match s with
-    | "\\e" -> handler := eval_input; "Print evaluated expr"
-    | "\\l" -> handler := lex_input; "Print lexemes"
-    | "\\p" -> handler := parse_input; "Print AST"
-    | "\\h" -> "Known commands: \\e, \\l, \\p, \\h"
-    | _ -> "Unknown command: " ^ s
-  else
-    !handler s
+let repl () =
+  (* input handlers *)
+  let eval_input = parse_string >> eval in
+  let lex_input = lex_string in
+  let parse_input = parse_string >> Option.maybe "" Ast.String.of_expr in
+  let handler = ref eval_input in
+  let hook s =
+    if s.[0] = '\\' then
+      match s with
+      | "\\e" -> handler := eval_input; "Print evaluated expr"
+      | "\\l" -> handler := lex_input; "Print lexemes"
+      | "\\p" -> handler := parse_input; "Print AST"
+      | "\\h" -> "Known commands: \\e, \\l, \\p, \\h"
+      | _ -> "Unknown command: " ^ s
+    else
+      !handler s
+  in
+  print_endline version_str;
+  print_endline "\\h for help";
+  try
+    while true do
+      output_string stdout "> ";
+      read_line () |> hook |> print_endline
+    done
+  with
+  | End_of_file -> exit 0
 
 let () =
   match Sys.argv with
@@ -50,13 +61,4 @@ let () =
       parse_ch stdin
         |> Option.map Ast.String.of_expr
         |> Option.iter print_endline
-  | _ ->
-      print_endline version_str;
-      print_endline "\\h for help";
-      try
-        while true do
-          output_string stdout "> ";
-          read_line () |> toplevel_hook |> print_endline
-        done
-      with
-      | End_of_file -> exit 0
+  | _ -> repl ()
