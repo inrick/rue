@@ -43,7 +43,7 @@ let repl () =
   print_endline "\\h for help";
   try
     while true do
-      output_string stdout "> ";
+      print_string "> ";
       read_line () |> hook |> print_endline
     done
   with End_of_file -> exit 0
