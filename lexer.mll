@@ -20,7 +20,7 @@ let to_string =
 }
 
 let digit = ['0'-'9']
-let int = '-'? digit digit*
+let int = digit digit*
 
 let ws = [' ' '\t']+
 let nl = '\n' | '\r' | "\r\n"

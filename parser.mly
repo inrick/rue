@@ -26,6 +26,7 @@ lit:
 expr:
   | expr2 { $1 }
   | PLUS e = expr { Unop (Flip, e) }
+  | MINUS e = expr { Unop (Minus, e) }
   | EXCL e = expr { Unop (Enum, e) }
   | PIPE e = expr { Unop (Rev, e) }
   | e1 = expr2 PERCENT e2 = expr { Binop (e1, Divide, e2) }

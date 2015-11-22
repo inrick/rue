@@ -8,6 +8,7 @@ type lit =
 type unop =
   | Enum
   | Flip
+  | Minus
   | Rev
 
 type binop =
@@ -29,6 +30,7 @@ module String = struct
   let of_unop = function
     | Enum -> "!"
     | Flip -> "+"
+    | Minus -> "-"
     | Rev -> "|"
 
   let of_binop = function
@@ -72,10 +74,15 @@ let rev = function
   | Int _ as x -> x
   | Array xs -> Array (List.rev xs)
 
+let neg = function
+  | Int x -> Int (-x)
+  | Array xs -> Array (List.map (fun x -> -x) xs)
+
 let rec eval = function (* TODO rewrite with continuations *)
   | Lit x -> x
   | Unop (Flip, e) -> eval e
   | Unop (Enum, e) -> enum (eval e)
+  | Unop (Minus, e) -> neg (eval e)
   | Unop (Rev, e) -> rev (eval e)
   | Binop (e1, Divide, e2) -> (eval e1) % (eval e2)
   | Binop (e1, Minus, e2) -> (eval e1) - (eval e2)
