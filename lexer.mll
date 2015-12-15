@@ -21,7 +21,7 @@ let to_string =
 }
 
 let digit = ['0'-'9']
-let int = digit digit*
+let int = digit+
 let float = digit* '.' digit+ | digit+ '.'
 
 let ws = [' ' '\t']+
