@@ -2,7 +2,9 @@ module P = Printf
 
 type lit =
   | Int of int
-  | Array of int list
+  | Float of float
+  | ArrayI of int list
+  | ArrayF of float list
 
 type unop =
   | Enum
@@ -24,7 +26,9 @@ type expr =
 module String = struct
   let rec of_lit = function
     | Int d -> string_of_int d
-    | Array xs -> List.map string_of_int xs |> String.concat " "
+    | Float f -> string_of_float f
+    | ArrayI xs -> List.map string_of_int xs |> String.concat " "
+    | ArrayF xs -> List.map string_of_float xs |> String.concat " "
 
   let of_unop = function
     | Enum -> "!"
@@ -47,7 +51,8 @@ module String = struct
 end
 
 let rec normalize = function
-  | Lit (Array [x]) -> Lit (Int x)
+  | Lit (ArrayI [x]) -> Lit (Int x)
+  | Lit (ArrayF [x]) -> Lit (Float x)
   | Lit _ as x -> x
   | Unop (op, e) -> Unop (op, normalize e)
   | Binop (e1, op, e2) -> Binop (normalize e1, op, normalize e2)

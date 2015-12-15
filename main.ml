@@ -38,6 +38,9 @@ let repl () =
       | Parser.Error -> "Parse error"
       | Division_by_zero -> "Division by zero"
       | Stack_overflow -> "Stack overflow"
+      | Eval.Type_error -> "Type error"
+      | Eval.Nyi_error -> "Not yet implemented"
+      | Eval.Dim_error -> "Dimension mismatch"
   in
   print_endline version_str;
   print_endline "\\h for help";

@@ -10,6 +10,7 @@ let to_string =
   | LPAR -> "LPAR"
   | RPAR -> "RPAR"
   | INT d -> sprintf "INT(%d)" d
+  | FLOAT f -> sprintf "FLOAT(%f)" f
   | EXCL -> "EXCL"
   | MINUS -> "MINUS"
   | MULT -> "MULT"
@@ -21,6 +22,7 @@ let to_string =
 
 let digit = ['0'-'9']
 let int = digit digit*
+let float = digit* '.' digit+ | digit+ '.'
 
 let ws = [' ' '\t']+
 let nl = '\n' | '\r' | "\r\n"
@@ -30,6 +32,7 @@ rule read = parse
   | ws { read lexbuf }
   | nl { L.new_line lexbuf; read lexbuf }
   | int { INT (int_of_string (L.lexeme lexbuf)) }
+  | float { FLOAT (float_of_string (L.lexeme lexbuf)) }
   | '(' { LPAR }
   | ')' { RPAR }
   | '!' { EXCL }

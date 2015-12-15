@@ -3,6 +3,7 @@
 %token LPAR
 %token RPAR
 %token <int> INT
+%token <float> FLOAT
 %token EXCL
 %token MINUS
 %token MULT
@@ -20,7 +21,8 @@ expropt:
   ;
 
 lit:
-  | list(INT) { Array $1 }
+  | list(INT) { ArrayI $1 }
+  | nonempty_list(FLOAT) { ArrayF $1 }
   ;
 
 expr:
