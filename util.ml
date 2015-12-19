@@ -2,11 +2,15 @@ let (>>) f g x = f x |> g
 
 let flip f = fun x y -> f y x
 
-let range i j =
-  let rec go ns = function
-    | k when k < i -> ns
-    | k -> go (k :: ns) (k-1) in
-  go [] (j-1)
+module List = struct
+  include List
+
+  let range i j =
+    let rec go ns = function
+      | k when k < i -> ns
+      | k -> go (k :: ns) (k-1) in
+    go [] (j-1)
+end
 
 module Option = struct
   type 'a t = 'a option

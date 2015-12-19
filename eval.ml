@@ -37,7 +37,7 @@ let ( * ) = lift ( * ) ( *. )
 let (%) = lift (/) (/.)
 
 let enum = function
-  | Int x -> ArrayI (range 0 x)
+  | Int x -> ArrayI (List.range 0 x)
   | Float x -> raise Type_error
   | ArrayI _ -> raise Nyi_error (* TODO need multi dimensional arrays *)
   | ArrayF _ -> raise Type_error
