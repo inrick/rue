@@ -16,7 +16,7 @@ let parse = Parser.expropt Lexer.read >> Option.map Ast.normalize
 let parse_ch = Lexing.from_channel >> parse
 let parse_string = Lexing.from_string >> parse
 
-let eval = Option.maybe (Ast.Int 0) Eval.eval >> Ast.String.of_lit
+let eval = Option.map Eval.eval >> Option.maybe "" Ast.String.of_lit
 
 let repl () =
   (* input handlers *)
