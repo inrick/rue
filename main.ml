@@ -25,7 +25,7 @@ let repl () =
   let parse_input = parse_string >> Option.maybe "" Ast.String.of_expr in
   let handler = ref eval_input in
   let hook s =
-    if s.[0] = '\\' then
+    if String.length s > 0 && s.[0] = '\\' then
       match s with
       | "\\e" -> handler := eval_input; "Print evaluated expr"
       | "\\l" -> handler := lex_input; "Print lexemes"
