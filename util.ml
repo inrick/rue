@@ -8,7 +8,7 @@ module Array = struct
   let map2 f xs ys =
     let len = length xs in
     if len <> length ys then
-      raise (Invalid_argument "Array.map2");
+      invalid_arg "Array.map2";
     init len (fun i -> f xs.(i) ys.(i))
 
   let range i j = init (j-i) (fun k -> k+i)
