@@ -51,8 +51,8 @@ let rev = function
 let neg = function
   | Int x -> Int (-x)
   | Float x -> Float (-.x)
-  | ArrayI xs -> ArrayI (Array.map (fun x -> -x) xs)
-  | ArrayF xs -> ArrayF (Array.map (fun x -> -.x) xs)
+  | ArrayI xs -> ArrayI (Array.map (~-) xs)
+  | ArrayF xs -> ArrayF (Array.map (~-.) xs)
 
 let rec eval = function (* TODO rewrite with continuations *)
   | Lit x -> x
