@@ -53,13 +53,16 @@ let neg = function
   | ArrayI xs -> ArrayI (Array.map (~-) xs)
   | ArrayF xs -> ArrayF (Array.map (~-.) xs)
 
-let rec eval = function (* TODO rewrite with continuations *)
-  | Lit x -> x
-  | Unop (Flip, e) -> eval e
-  | Unop (Enum, e) -> enum (eval e)
-  | Unop (Minus, e) -> neg (eval e)
-  | Unop (Rev, e) -> rev (eval e)
-  | Binop (e1, Divide, e2) -> (eval e1) % (eval e2)
-  | Binop (e1, Minus, e2) -> (eval e1) - (eval e2)
-  | Binop (e1, Mult, e2) -> (eval e1) * (eval e2)
-  | Binop (e1, Plus, e2) -> (eval e1) + (eval e2)
+let eval expr =
+  let rec go x0 k = match x0 with
+  | Lit x -> k x
+  | Unop (Flip, e) -> go e k
+  | Unop (Enum, e) -> go e (enum >> k)
+  | Unop (Minus, e) -> go e (neg >> k)
+  | Unop (Rev, e) -> go e (rev >> k)
+  | Binop (e1, Divide, e2) -> go e1 (fun x -> go e2 (fun y -> k (x % y)))
+  | Binop (e1, Minus, e2) -> go e1 (fun x -> go e2 (fun y -> k (x - y)))
+  | Binop (e1, Mult, e2) -> go e1 (fun x -> go e2 (fun y -> k (x * y)))
+  | Binop (e1, Plus, e2) -> go e1 (fun x -> go e2 (fun y -> k (x + y)))
+  in
+  go expr (fun x -> x)
