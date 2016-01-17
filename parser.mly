@@ -21,7 +21,7 @@ expropt:
   ;
 
 lit:
-  | list(INT) { ArrayI (Array.of_list $1) }
+  | nonempty_list(INT) { ArrayI (Array.of_list $1) }
   | nonempty_list(FLOAT) { ArrayF (Array.of_list $1) }
   ;
 
