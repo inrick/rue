@@ -10,14 +10,14 @@ let lift opi opf x0 y0 = match x0, y0 with
   | Int x, ArrayI ys -> ArrayI (Array.map (opi x) ys)
   | ArrayI xs, Int y -> ArrayI (Array.map (flip opi y) xs)
   | ArrayI xs, ArrayI ys ->
-      if Array.length xs <> Array.length ys then raise Dim_error;
-      ArrayI (Array.map2 opi xs ys)
+      (try ArrayI (Array.map2 opi xs ys) with
+       Invalid_argument _ -> raise Dim_error)
   | Float x, Float y -> Float (opf x y)
   | Float x, ArrayF ys -> ArrayF (Array.map (opf x) ys)
   | ArrayF xs, Float y -> ArrayF (Array.map (flip opf y) xs)
   | ArrayF xs, ArrayF ys ->
-      if Array.length xs <> Array.length ys then raise Dim_error;
-      ArrayF (Array.map2 opf xs ys)
+      (try ArrayF (Array.map2 opf xs ys) with
+       Invalid_argument _ -> raise Dim_error)
   | Int x, Float y -> Float (opf (float_of_int x) y)
   | Float x, Int y -> Float (opf x (float_of_int y))
   | Int x, ArrayF ys -> ArrayF (Array.map (opf (float_of_int x)) ys)
@@ -25,11 +25,11 @@ let lift opi opf x0 y0 = match x0, y0 with
   | ArrayI xs, Float y -> ArrayF (Array.map (float_of_int >> flip opf y) xs)
   | ArrayF xs, Int y -> ArrayF (Array.map (flip opf (float_of_int y)) xs)
   | ArrayF xs, ArrayI ys ->
-      if Array.length xs <> Array.length ys then raise Dim_error;
-      ArrayF (Array.map2 opf xs (Array.map float_of_int ys))
+      (try ArrayF (Array.map2 opf xs (Array.map float_of_int ys)) with
+       Invalid_argument _ -> raise Dim_error)
   | ArrayI xs, ArrayF ys ->
-      if Array.length xs <> Array.length ys then raise Dim_error;
-      ArrayF (Array.map2 opf (Array.map float_of_int xs) ys)
+      (try ArrayF (Array.map2 opf (Array.map float_of_int xs) ys) with
+       Invalid_argument _ -> raise Dim_error)
 
 let (+) = lift (+) (+.)
 let (-) = lift (-) (-.)
