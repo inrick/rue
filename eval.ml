@@ -43,8 +43,7 @@ let enum = function
   | ArrayF _ -> raise Type_error
 
 let rev = function
-  | Int _ as x -> x
-  | Float _ as x -> x
+  | Int _ | Float _ as x -> x
   | ArrayI xs -> ArrayI (Array.rev xs)
   | ArrayF xs -> ArrayF (Array.rev xs)
 
