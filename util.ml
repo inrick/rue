@@ -1,6 +1,6 @@
 let (>>) f g x = f x |> g
 
-let flip f = fun x y -> f y x
+let flip f x y = f y x
 
 module Array = struct
   include Array
