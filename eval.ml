@@ -6,23 +6,22 @@ exception Nyi_error
 exception Dim_error
 
 let unify x y = match x, y with
-  | ArrayI _, ArrayI _ | ArrayF _, ArrayF _ -> x, y
-  | ArrayI xs, ArrayF _ -> ArrayF (Array.map float_of_int xs), y
-  | ArrayF _, ArrayI ys -> x, ArrayF (Array.map float_of_int ys)
+  | VI _, VI _ | VF _, VF _ -> x, y
+  | VI xs, VF _ -> VF (Array.map float_of_int xs), y
+  | VF _, VI ys -> x, VF (Array.map float_of_int ys)
 
 let lift opi opf x0 y0 = match unify x0 y0 with
-  | ArrayI [|x|], ArrayI ys -> ArrayI (Array.map (opi x) ys)
-  | ArrayI xs, ArrayI [|y|] -> ArrayI (Array.map (flip opi y) xs)
-  | ArrayI xs, ArrayI ys ->
-      (try ArrayI (Array.map2 opi xs ys) with
+  | VI [|x|], VI ys -> VI (Array.map (opi x) ys)
+  | VI xs, VI [|y|] -> VI (Array.map (flip opi y) xs)
+  | VI xs, VI ys ->
+      (try VI (Array.map2 opi xs ys) with
        Invalid_argument _ -> raise Dim_error)
-  | ArrayF [|x|], ArrayF ys -> ArrayF (Array.map (opf x) ys)
-  | ArrayF xs, ArrayF [|y|] -> ArrayF (Array.map (flip opf y) xs)
-  | ArrayF xs, ArrayF ys ->
-      (try ArrayF (Array.map2 opf xs ys) with
+  | VF [|x|], VF ys -> VF (Array.map (opf x) ys)
+  | VF xs, VF [|y|] -> VF (Array.map (flip opf y) xs)
+  | VF xs, VF ys ->
+      (try VF (Array.map2 opf xs ys) with
        Invalid_argument _ -> raise Dim_error)
-  | ArrayI _, ArrayF _ | ArrayF _, ArrayI _ ->
-      assert false (* unify makes this impossible *)
+  | VI _, VF _ | VF _, VI _ -> assert false (* unify makes this impossible *)
 
 let (+) = lift (+) (+.)
 let (-) = lift (-) (-.)
@@ -30,18 +29,18 @@ let ( * ) = lift ( * ) ( *. )
 let (%) = lift (/) (/.)
 
 let enum = function
-  | ArrayI [|x|] -> ArrayI (Array.range 0 x)
-  | ArrayF [|x|] -> raise Type_error
-  | ArrayI _ -> raise Nyi_error (* TODO need multi dimensional arrays *)
-  | ArrayF _ -> raise Type_error
+  | VI [|x|] -> VI (Array.range 0 x)
+  | VF [|x|] -> raise Type_error
+  | VI _ -> raise Nyi_error (* TODO need multi dimensional arrays *)
+  | VF _ -> raise Type_error
 
 let rev = function
-  | ArrayI xs -> ArrayI (Array.rev xs)
-  | ArrayF xs -> ArrayF (Array.rev xs)
+  | VI xs -> VI (Array.rev xs)
+  | VF xs -> VF (Array.rev xs)
 
 let neg = function
-  | ArrayI xs -> ArrayI (Array.map (~-) xs)
-  | ArrayF xs -> ArrayF (Array.map (~-.) xs)
+  | VI xs -> VI (Array.map (~-) xs)
+  | VF xs -> VF (Array.map (~-.) xs)
 
 let eval expr =
   let rec go x0 k = match x0 with

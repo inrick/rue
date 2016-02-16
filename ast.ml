@@ -1,8 +1,8 @@
 module P = Printf
 
 type lit =
-  | ArrayI of int array
-  | ArrayF of float array
+  | VI of int array
+  | VF of float array
 
 type unop =
   | Enum
@@ -23,9 +23,9 @@ type expr =
 
 module String = struct
   let rec of_lit = function
-    | ArrayI xs ->
+    | VI xs ->
         Array.to_list xs |> List.map string_of_int |> String.concat " "
-    | ArrayF xs ->
+    | VF xs ->
         Array.to_list xs |> List.map string_of_float |> String.concat " "
 
   let of_unop = function
