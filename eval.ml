@@ -5,31 +5,24 @@ exception Type_error
 exception Nyi_error
 exception Dim_error
 
-let lift opi opf x0 y0 = match x0, y0 with
-  | Int x, Int y -> Int (opi x y)
-  | Int x, ArrayI ys -> ArrayI (Array.map (opi x) ys)
-  | ArrayI xs, Int y -> ArrayI (Array.map (flip opi y) xs)
+let unify x y = match x, y with
+  | ArrayI _, ArrayI _ | ArrayF _, ArrayF _ -> x, y
+  | ArrayI xs, ArrayF _ -> ArrayF (Array.map float_of_int xs), y
+  | ArrayF _, ArrayI ys -> x, ArrayF (Array.map float_of_int ys)
+
+let lift opi opf x0 y0 = match unify x0 y0 with
+  | ArrayI [|x|], ArrayI ys -> ArrayI (Array.map (opi x) ys)
+  | ArrayI xs, ArrayI [|y|] -> ArrayI (Array.map (flip opi y) xs)
   | ArrayI xs, ArrayI ys ->
       (try ArrayI (Array.map2 opi xs ys) with
        Invalid_argument _ -> raise Dim_error)
-  | Float x, Float y -> Float (opf x y)
-  | Float x, ArrayF ys -> ArrayF (Array.map (opf x) ys)
-  | ArrayF xs, Float y -> ArrayF (Array.map (flip opf y) xs)
+  | ArrayF [|x|], ArrayF ys -> ArrayF (Array.map (opf x) ys)
+  | ArrayF xs, ArrayF [|y|] -> ArrayF (Array.map (flip opf y) xs)
   | ArrayF xs, ArrayF ys ->
       (try ArrayF (Array.map2 opf xs ys) with
        Invalid_argument _ -> raise Dim_error)
-  | Int x, Float y -> Float (opf (float_of_int x) y)
-  | Float x, Int y -> Float (opf x (float_of_int y))
-  | Int x, ArrayF ys -> ArrayF (Array.map (opf (float_of_int x)) ys)
-  | Float x, ArrayI ys -> ArrayF (Array.map (float_of_int >> opf x) ys)
-  | ArrayI xs, Float y -> ArrayF (Array.map (float_of_int >> flip opf y) xs)
-  | ArrayF xs, Int y -> ArrayF (Array.map (flip opf (float_of_int y)) xs)
-  | ArrayF xs, ArrayI ys ->
-      (try ArrayF (Array.map2 opf xs (Array.map float_of_int ys)) with
-       Invalid_argument _ -> raise Dim_error)
-  | ArrayI xs, ArrayF ys ->
-      (try ArrayF (Array.map2 opf (Array.map float_of_int xs) ys) with
-       Invalid_argument _ -> raise Dim_error)
+  | ArrayI _, ArrayF _ | ArrayF _, ArrayI _ ->
+      assert false (* unify makes this impossible *)
 
 let (+) = lift (+) (+.)
 let (-) = lift (-) (-.)
@@ -37,19 +30,16 @@ let ( * ) = lift ( * ) ( *. )
 let (%) = lift (/) (/.)
 
 let enum = function
-  | Int x -> ArrayI (Array.range 0 x)
-  | Float x -> raise Type_error
+  | ArrayI [|x|] -> ArrayI (Array.range 0 x)
+  | ArrayF [|x|] -> raise Type_error
   | ArrayI _ -> raise Nyi_error (* TODO need multi dimensional arrays *)
   | ArrayF _ -> raise Type_error
 
 let rev = function
-  | Int _ | Float _ as x -> x
   | ArrayI xs -> ArrayI (Array.rev xs)
   | ArrayF xs -> ArrayF (Array.rev xs)
 
 let neg = function
-  | Int x -> Int (-x)
-  | Float x -> Float (-.x)
   | ArrayI xs -> ArrayI (Array.map (~-) xs)
   | ArrayF xs -> ArrayF (Array.map (~-.) xs)
 

@@ -12,7 +12,7 @@ let lex = Lexer.tokens >> List.map Lexer.to_string >> String.concat " "
 let lex_ch = Lexing.from_channel >> lex
 let lex_string = Lexing.from_string >> lex
 
-let parse = Parser.expropt Lexer.read >> Option.map Ast.normalize
+let parse = Parser.expropt Lexer.read
 let parse_ch = Lexing.from_channel >> parse
 let parse_string = Lexing.from_string >> parse
 

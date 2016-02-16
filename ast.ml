@@ -1,8 +1,6 @@
 module P = Printf
 
 type lit =
-  | Int of int
-  | Float of float
   | ArrayI of int array
   | ArrayF of float array
 
@@ -25,8 +23,6 @@ type expr =
 
 module String = struct
   let rec of_lit = function
-    | Int d -> string_of_int d
-    | Float f -> string_of_float f
     | ArrayI xs ->
         Array.to_list xs |> List.map string_of_int |> String.concat " "
     | ArrayF xs ->
@@ -51,10 +47,3 @@ module String = struct
         P.sprintf "Binop(%s, %s, %s)"
           (of_expr e1) (of_binop op) (of_expr e2)
 end
-
-let rec normalize = function
-  | Lit (ArrayI [|x|]) -> Lit (Int x)
-  | Lit (ArrayF [|x|]) -> Lit (Float x)
-  | Lit _ as x -> x
-  | Unop (op, e) -> Unop (op, normalize e)
-  | Binop (e1, op, e2) -> Binop (normalize e1, op, normalize e2)
