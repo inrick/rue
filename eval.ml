@@ -30,7 +30,6 @@ let (%) = lift (/) (/.)
 
 let enum = function
   | VI [|x|] -> VI (Array.range 0 x)
-  | VF [|x|] -> raise Type_error
   | VI _ -> raise Nyi_error (* TODO need multi dimensional arrays *)
   | VF _ -> raise Type_error
 
