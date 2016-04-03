@@ -1,8 +1,8 @@
-OCAMLC := ocamlc
+OCAMLC := ocamlc.opt
 OCAMLC_OPTS := -warn-error +A -annot
 OCAMLC_LINK :=
 
-OCAMLOPT := ocamlopt
+OCAMLOPT := ocamlopt.opt
 OCAMLOPT_OPTS := -warn-error +A -annot
 OCAMLOPT_LINK :=
 
