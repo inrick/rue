@@ -48,8 +48,14 @@ native: .depend $(OBJSOPT)
 bytecode: .depend $(OBJS)
 	$(OCAMLC) -o $(RESULT) $(OCAMLC_OPTS) $(OCAMLC_LINK) $(OBJS)
 
+.PHONY: doc
+doc: $(OBJS)
+	mkdir -p doc
+	ocamldoc -html -d doc $(MLS)
+
 .PHONY: clean
 clean:
+	rm -fr doc
 	rm -f \
 	  *.cma \
 	  *.cmxa \
