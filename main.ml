@@ -2,10 +2,10 @@ open Util
 module P = Printf
 
 let bin = "rue"
-let version = 0.1
-let version_str = P.sprintf "%s version %F" bin version
+let version = "0.1"
+let about = P.sprintf "%s version %s" bin version
 let usage exit_code =
-  print_endline version_str;
+  print_endline about;
   exit exit_code
 
 let lex = Lexer.tokens >> List.map Lexer.to_string >> String.concat " "
@@ -42,7 +42,7 @@ let repl () =
       | Eval.Nyi_error -> "Not yet implemented"
       | Eval.Dim_error -> "Dimension mismatch"
   in
-  print_endline version_str;
+  print_endline about;
   print_endline "\\h for help";
   try
     while true do
