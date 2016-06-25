@@ -44,12 +44,15 @@ let repl () =
   in
   print_endline about;
   print_endline "\\h for help";
-  try
-    while true do
+  Sys.catch_break true; (* raise Sys.Break on ^C *)
+  while true do
+    try
       print_string "> ";
       read_line () |> hook |> print_endline
-    done
-  with End_of_file -> exit 0
+    with
+    | Sys.Break -> print_endline "Interrupted (^D to exit)"
+    | End_of_file -> exit 0
+  done
 
 let () =
   match Sys.argv with
