@@ -71,6 +71,12 @@ clean:
 	  $(MLYS:.mly=.mli) \
 	  $(RESULT)
 
+.PHONY: watch
+watch:
+	while true; do \
+	  inotifywait $(SOURCES) && make; \
+	done
+
 .depend: $(MLS)
 	ocamldep $(MLS) >.depend
 
