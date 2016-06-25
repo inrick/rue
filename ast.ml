@@ -24,9 +24,9 @@ type expr =
 module String = struct
   let rec of_lit = function
     | VI xs ->
-        Array.to_list xs |> List.map string_of_int |> String.concat " "
+        xs |> Array.map string_of_int |> Array.to_list |> String.concat " "
     | VF xs ->
-        Array.to_list xs |> List.map string_of_float |> String.concat " "
+        xs |> Array.map string_of_float |> Array.to_list |> String.concat " "
 
   let of_unop = function
     | Enum -> "!"
