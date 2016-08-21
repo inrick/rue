@@ -7,6 +7,10 @@ BIN := rue
 .PHONY: all
 all: native
 
+.PHONY: doc
+doc:
+	$(OCB) src/rue.docdir/index.html
+
 .PHONY: clean
 clean:
 	$(OCB) -clean
