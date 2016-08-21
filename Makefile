@@ -2,6 +2,7 @@ OCB_FLAGS := -tag bin_annot -use-menhir -I src
 OCB := ocamlbuild $(OCB_FLAGS)
 
 TARGET := main
+BIN := rue
 
 .PHONY: all
 all: native
@@ -9,10 +10,12 @@ all: native
 .PHONY: clean
 clean:
 	$(OCB) -clean
+	rm -f $(BIN)
 
 .PHONY: native
 native:
 	$(OCB) $(TARGET).native
+	cp -aL $(TARGET).native $(BIN)
 
 .PHONY: byte
 byte:
