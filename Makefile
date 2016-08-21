@@ -1,4 +1,4 @@
-OCB_FLAGS := -tag bin_annot -use-menhir
+OCB_FLAGS := -tag bin_annot -use-menhir -I src
 OCB := ocamlbuild $(OCB_FLAGS)
 
 TARGET := main
@@ -29,5 +29,5 @@ debug:
 .PHONY: watch
 watch:
 	while true; do \
-	  inotifywait $(SOURCES) && make; \
+	  inotifywait src/* && make; \
 	done

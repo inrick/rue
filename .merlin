@@ -1,2 +1,2 @@
-B _build
-S .
+B _build/src
+S src
