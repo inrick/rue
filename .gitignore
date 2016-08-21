@@ -1,12 +1,3 @@
-*.cmx
-*.cma
-*.cmxa
-*.cmi
-*.a
-*.o
-*.annot
-rue
-.depend
-lexer.ml
-parser.ml
-parser.mli
+_build/
+main.native
+main.byte
