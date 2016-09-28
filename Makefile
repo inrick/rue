@@ -1,4 +1,4 @@
-OCB_FLAGS := -tag bin_annot -use-menhir -I src
+OCB_FLAGS :=
 OCB := ocamlbuild $(OCB_FLAGS)
 
 TARGET := main
