@@ -33,6 +33,10 @@ profile:
 debug:
 	$(OCB) -tag debug $(TARGET).byte
 
+.PHONY: test
+test:
+	$(OCB) test.native && ./test.native
+
 .PHONY: watch
 watch:
 	while true; do \
