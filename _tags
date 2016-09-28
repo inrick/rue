@@ -1,2 +1,2 @@
-true: bin_annot, use_menhir
+true: bin_annot, safe_string, use_menhir
 <src>: include
