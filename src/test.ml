@@ -1,11 +1,6 @@
 open Util
 
-(* TODO use same eval as Main *)
-let eval =
-  Lexing.from_string >>
-  Parser.expropt Lexer.read >>
-  Option.map Eval.eval >>
-  Option.maybe "" Ast.String.of_lit
+let eval = Repl.(parse_string >> eval)
 
 let () =
   assert (eval "1+1 2 3" = "2 3 4");

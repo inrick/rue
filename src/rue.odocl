@@ -3,4 +3,6 @@ Eval
 Lexer
 Main
 Parser
+Repl
 Util
+Version
