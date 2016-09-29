@@ -35,7 +35,7 @@ debug:
 
 .PHONY: test
 test:
-	$(OCB) test.native && ./test.native
+	$(OCB) -tag debug test.native && OCAMLRUNPARAM=b ./test.native
 
 .PHONY: watch
 watch:
