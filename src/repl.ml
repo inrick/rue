@@ -8,7 +8,7 @@ let parse = Parser.expropt Lexer.read
 let parse_ch = Lexing.from_channel >> parse
 let parse_string = Lexing.from_string >> parse
 
-let eval = Option.map Eval.eval >> Option.maybe "" Ast.String.of_lit
+let eval = Option.map Ast.eval >> Option.maybe "" V.show
 
 let run () =
   (* input handlers *)
@@ -30,9 +30,9 @@ let run () =
       | Parser.Error -> "Parse error"
       | Division_by_zero -> "Division by zero"
       | Stack_overflow -> "Stack overflow"
-      | Eval.Type_error -> "Type error"
-      | Eval.Nyi_error -> "Not yet implemented"
-      | Eval.Dim_error -> "Dimension mismatch"
+      | V.Type_error -> "Type error"
+      | V.Nyi_error -> "Not yet implemented"
+      | V.Dim_error -> "Dimension mismatch"
   in
   print_endline Version.about;
   print_endline "\\h for help";

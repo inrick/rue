@@ -1,8 +1,4 @@
-module P = Printf
-
-type lit =
-  | VI of int array
-  | VF of float array
+open Util
 
 type unop =
   | Enum
@@ -17,17 +13,11 @@ type binop =
   | Minus
 
 type expr =
-  | Lit of lit
+  | Lit of V.t
   | Unop of unop * expr
   | Binop of expr * binop * expr
 
 module String = struct
-  let rec of_lit = function
-    | VI xs ->
-        xs |> Array.map string_of_int |> Array.to_list |> String.concat " "
-    | VF xs ->
-        xs |> Array.map string_of_float |> Array.to_list |> String.concat " "
-
   let of_unop = function
     | Enum -> "!"
     | Flip -> "+"
@@ -40,10 +30,25 @@ module String = struct
     | Minus -> "-"
     | Plus -> "+"
 
-  let rec of_expr = function
-    | Lit x -> P.sprintf "Lit(%s)" (of_lit x)
-    | Unop (op, e) -> P.sprintf "Unop(%s, %s)" (of_unop op) (of_expr e)
+  let rec of_expr =
+    let open Printf in
+    function
+    | Lit x -> sprintf "Lit(%s)" (V.show x)
+    | Unop (op, e) -> sprintf "Unop(%s, %s)" (of_unop op) (of_expr e)
     | Binop (e1, op, e2) ->
-        P.sprintf "Binop(%s, %s, %s)"
-          (of_expr e1) (of_binop op) (of_expr e2)
+        sprintf "Binop(%s, %s, %s)" (of_expr e1) (of_binop op) (of_expr e2)
 end
+
+let eval expr =
+  let rec go x0 k = match x0 with
+  | Lit x -> k x
+  | Unop (Flip, e) -> go e k
+  | Unop (Enum, e) -> go e (V.enum >> k)
+  | Unop (Minus, e) -> go e (V.neg >> k)
+  | Unop (Rev, e) -> go e (V.rev >> k)
+  | Binop (e1, Divide, e2) -> go e1 (fun x -> go e2 (fun y -> k (V.div x y)))
+  | Binop (e1, Minus, e2) -> go e1 (fun x -> go e2 (fun y -> k (V.sub x y)))
+  | Binop (e1, Mult, e2) -> go e1 (fun x -> go e2 (fun y -> k (V.mult x y)))
+  | Binop (e1, Plus, e2) -> go e1 (fun x -> go e2 (fun y -> k (V.add x y)))
+  in
+  go expr (fun x -> x)

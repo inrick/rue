@@ -15,5 +15,5 @@ let () =
   assert (eval "(1+!10)*|1+!10" = "10 18 24 28 30 30 28 24 18 10");
   assert (eval "900.%5*(1+!10)*|1+!10" =
     "18. 10. 7.5 6.42857142857 6. 6. 6.42857142857 7.5 10. 18.");
-  assert_raise Eval.Dim_error (fun () -> eval "1 2 3+!4");
-  assert_raise Eval.Type_error (fun () -> eval "!7.");
+  assert_raise V.Dim_error (fun () -> eval "1 2 3+!4");
+  assert_raise V.Type_error (fun () -> eval "!7.");

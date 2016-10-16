@@ -1,9 +1,13 @@
-open Ast
 open Util
+
+type t = VI of int array | VF of float array
 
 exception Type_error
 exception Nyi_error
 exception Dim_error
+
+let of_ints xs = VI xs
+let of_floats xs = VF xs
 
 let unify x y = match x, y with
   | VI _, VI _ | VF _, VF _ -> x, y
@@ -23,10 +27,10 @@ let lift opi opf x0 y0 = match unify x0 y0 with
        Invalid_argument _ -> raise Dim_error)
   | VI _, VF _ | VF _, VI _ -> assert false (* unify makes this impossible *)
 
-let (+) = lift (+) (+.)
-let (-) = lift (-) (-.)
-let ( * ) = lift ( * ) ( *. )
-let (%) = lift (/) (/.)
+let add = lift (+) (+.)
+let sub = lift (-) (-.)
+let mult = lift ( * ) ( *. )
+let div = lift (/) (/.)
 
 let enum = function
   | VI [|x|] -> VI (Array.range 0 x)
@@ -41,16 +45,9 @@ let neg = function
   | VI xs -> VI (Array.map (~-) xs)
   | VF xs -> VF (Array.map (~-.) xs)
 
-let eval expr =
-  let rec go x0 k = match x0 with
-  | Lit x -> k x
-  | Unop (Flip, e) -> go e k
-  | Unop (Enum, e) -> go e (enum >> k)
-  | Unop (Minus, e) -> go e (neg >> k)
-  | Unop (Rev, e) -> go e (rev >> k)
-  | Binop (e1, Divide, e2) -> go e1 (fun x -> go e2 (fun y -> k (x % y)))
-  | Binop (e1, Minus, e2) -> go e1 (fun x -> go e2 (fun y -> k (x - y)))
-  | Binop (e1, Mult, e2) -> go e1 (fun x -> go e2 (fun y -> k (x * y)))
-  | Binop (e1, Plus, e2) -> go e1 (fun x -> go e2 (fun y -> k (x + y)))
-  in
-  go expr (fun x -> x)
+let show =
+  let print_arr show_elem =
+    Array.map show_elem >> Array.to_list >> String.concat " " in
+  function
+  | VI xs -> print_arr string_of_int xs
+  | VF xs -> print_arr string_of_float xs

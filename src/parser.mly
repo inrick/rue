@@ -21,8 +21,8 @@ expropt:
   ;
 
 lit:
-  | nonempty_list(INT) { VI (Array.of_list $1) }
-  | nonempty_list(FLOAT) { VF (Array.of_list $1) }
+  | nonempty_list(INT) { V.of_ints (Array.of_list $1) }
+  | nonempty_list(FLOAT) { V.of_floats (Array.of_list $1) }
   ;
 
 expr:
