@@ -26,6 +26,17 @@ module List = struct
       | k when k < i -> ns
       | k -> go (k :: ns) (k-1) in
     go [] (j-1)
+
+  let rec is_prefix_of xs0 ys0 = match xs0, ys0 with
+    | [], _ -> true
+    | _, [] -> false
+    | x::xs, y::ys -> x = y && is_prefix_of xs ys
+
+  let drop_while f =
+    let rec go = function
+    | x::xs when f x -> go xs
+    | xs -> xs in
+    go
 end
 
 module Option = struct
