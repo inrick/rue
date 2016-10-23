@@ -33,6 +33,7 @@ expr:
   | MINUS e = expr { Unop (Minus, e) }
   | EXCL e = expr { Unop (Enum, e) }
   | PIPE e = expr { Unop (Rev, e) }
+  | HASH e = expr { Unop (Count, e) }
   | CIRCUMFLEX e = expr { Unop (Shape_of, e) }
   | e1 = expr2 PERCENT e2 = expr { Binop (e1, Divide, e2) }
   | e1 = expr2 MINUS e2 = expr { Binop (e1, Minus, e2) }

@@ -47,6 +47,9 @@ val rev : t -> t
 (** [neg x] performs element-wise negation. *)
 val neg : t -> t
 
+(** [count x] returns the number of elements in [x]. *)
+val count : t -> t
+
 (** [take s x] creates new vector with shape [s] where elements are fetched
   cyclically from [x]. Raises [Dim_error] if [s] is not scalar or one
   dimensional. Raises [Type_error] if [s] is not an integer vector. *)

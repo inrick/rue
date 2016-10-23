@@ -27,3 +27,5 @@ let () =
   assert_raise V.Type_error (fun () -> eval "5. 7.#1");
   assert (eval "^7 8 2#1 2" = "7 8 2");
   assert (eval "^1 2 3+3 2 3#6" = "3 2 3");
+  assert (eval "#3 4 5#1" = "3");
+  assert (eval "#7" = "1");

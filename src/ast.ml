@@ -1,6 +1,7 @@
 open Util
 
 type unop =
+  | Count
   | Enum
   | Flip
   | Minus
@@ -21,6 +22,7 @@ type expr =
 
 module String = struct
   let of_unop = function
+    | Count -> "#"
     | Enum -> "!"
     | Flip -> "+"
     | Minus -> "-"
@@ -46,6 +48,7 @@ end
 let eval expr =
   let rec go x0 k = match x0 with
   | Lit x -> k x
+  | Unop (Count, e) -> go e (V.count >> k)
   | Unop (Flip, e) -> go e k
   | Unop (Enum, e) -> go e (V.enum >> k)
   | Unop (Minus, e) -> go e (V.neg >> k)

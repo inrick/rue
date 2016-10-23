@@ -63,6 +63,10 @@ let neg x0 = match x0.v with
   | VI xs -> {x0 with v = VI (Array.map (~-) xs)}
   | VF xs -> {x0 with v = VF (Array.map (~-.) xs)}
 
+let count x = match x.shape with
+  | [] -> of_ints [|1|]
+  | y::_ -> of_ints [|y|]
+
 let take s x =
   if List.length s.shape > 1 then raise Dim_error;
   match s.v with
