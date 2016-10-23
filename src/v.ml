@@ -3,6 +3,7 @@ open Util
 type elt = VI of int array | VF of float array
 type t = {shape : int list; v : elt}
 
+exception Domain_error
 exception Type_error
 exception Nyi_error
 exception Dim_error
@@ -48,7 +49,9 @@ let mult = lift ( * ) ( *. )
 let div = lift (/) (/.)
 
 let enum x0 = match x0.v with
-  | VI [|x|] -> {shape = [x]; v = VI (Array.range 0 x)}
+  | VI [|x|] ->
+      if x < 0 then raise Domain_error
+      else {shape = [x]; v = VI (Array.range 0 x)}
   | VI _ -> raise Nyi_error (* TODO need multi dimensional arrays *)
   | VF _ -> raise Type_error
 

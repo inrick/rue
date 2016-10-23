@@ -3,6 +3,9 @@
 
 type t
 
+(** Domain error. *)
+exception Domain_error
+
 (** Type error. *)
 exception Type_error
 

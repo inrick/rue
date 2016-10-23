@@ -30,6 +30,7 @@ let run () =
       | Parser.Error -> "Parse error"
       | Division_by_zero -> "Division by zero"
       | Stack_overflow -> "Stack overflow"
+      | V.Domain_error -> "Domain error"
       | V.Type_error -> "Type error"
       | V.Nyi_error -> "Not yet implemented"
       | V.Dim_error -> "Dimension mismatch"
