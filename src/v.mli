@@ -44,5 +44,13 @@ val rev : t -> t
 (** [neg x] performs element-wise negation. *)
 val neg : t -> t
 
+(** [take s x] creates new vector with shape [s] where elements are fetched
+  cyclically from [x]. Raises [Dim_error] if [s] is not scalar or one
+  dimensional. Raises [Type_error] if [s] is not an integer vector. *)
+val take : t -> t -> t
+
+(** [shape_of x] returns the shape of [x]. *)
+val shape_of : t -> t
+
 (** [show x] creates a printable string representation of [x]. *)
 val show : t -> string

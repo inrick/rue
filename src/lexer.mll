@@ -11,7 +11,9 @@ let to_string =
   | RPAR -> "RPAR"
   | INT d -> sprintf "INT(%d)" d
   | FLOAT f -> sprintf "FLOAT(%f)" f
+  | CIRCUMFLEX -> "CIRCUMFLEX"
   | EXCL -> "EXCL"
+  | HASH -> "HASH"
   | MINUS -> "MINUS"
   | MULT -> "MULT"
   | PERCENT -> "PERCENT"
@@ -35,7 +37,9 @@ rule read = parse
   | float { FLOAT (float_of_string (L.lexeme lexbuf)) }
   | '(' { LPAR }
   | ')' { RPAR }
+  | '^' { CIRCUMFLEX }
   | '!' { EXCL }
+  | '#' { HASH }
   | '-' { MINUS }
   | '*' { MULT }
   | '|' { PIPE }

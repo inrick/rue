@@ -60,6 +60,23 @@ let neg x0 = match x0.v with
   | VI xs -> {x0 with v = VI (Array.map (~-) xs)}
   | VF xs -> {x0 with v = VF (Array.map (~-.) xs)}
 
+let take s x =
+  if List.length s.shape > 1 then raise Dim_error;
+  match s.v with
+  | VF _ -> raise Type_error
+  | VI shape ->
+    let shape = Array.to_list shape in
+    let xlen = length x.v in
+    let len = List.fold_left ( * ) 1 shape in
+    let create xs = Array.init len (fun i -> xs.(i mod xlen)) in
+    let v = match x.v with
+    | VI xs -> VI (create xs)
+    | VF xs -> VF (create xs) in
+    {shape; v}
+
+let shape_of x = of_ints (Array.of_list x.shape)
+
+(* TODO pretty print higher dimensional arrays *)
 let show x =
   let print_arr show_elem =
     Array.map show_elem >> Array.to_list >> String.concat " " in

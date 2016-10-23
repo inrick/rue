@@ -17,3 +17,12 @@ let () =
     "18. 10. 7.5 6.42857142857 6. 6. 6.42857142857 7.5 10. 18.");
   assert_raise V.Dim_error (fun () -> eval "1 2 3+!4");
   assert_raise V.Type_error (fun () -> eval "!7.");
+  assert (eval "1 2 3+3 2 3#6" = "7 8 9 7 8 9 7 8 9 7 8 9 7 8 9 7 8 9");
+  assert (eval "(2 2#5 4 3 2)+2 2 3#1" = "6 5 4 3 6 5 4 3 6 5 4 3");
+  assert (eval "(3#2)#7" = "7 7 7 7 7 7 7 7");
+  assert_raise V.Dim_error (fun () -> eval "1 1 1+1 1 3#5");
+  assert_raise V.Dim_error (fun () -> eval "(5 5#1)#1");
+  assert_raise V.Dim_error (fun () -> eval "(1 1#1)#1");
+  assert_raise V.Type_error (fun () -> eval "5. 7.#1");
+  assert (eval "^7 8 2#1 2" = "7 8 2");
+  assert (eval "^1 2 3+3 2 3#6" = "3 2 3");

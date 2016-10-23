@@ -2,7 +2,7 @@ rue
 ===
 
 Initial fragments of K inspired interpreter. Currently only supports scalars
-and one dimensional arrays with a limited set of operators: `-+*%|!`.
+and one dimensional arrays with a limited set of operators: `-+*%|!#^`.
 
 Need a multi dimensional array representation before progress can be made.
 
@@ -39,6 +39,10 @@ Binop(Lit(900.), %, Binop(Lit(5), *, Binop(Binop(Lit(1), +, Unop(!, Lit(10))), *
 Print evaluated expr
 > 900.%5*(1+!10)*|1+!10
 18. 10. 7.5 6.42857142857 6. 6. 6.42857142857 7.5 10. 18.
+> (3#2)#7
+7 7 7 7 7 7 7 7
+> ^(3#2)#7
+2 2 2
 ```
 
 Dependencies
