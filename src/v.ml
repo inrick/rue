@@ -72,6 +72,7 @@ let take s x =
   match s.v with
   | VF _ -> raise Type_error
   | VI shape ->
+    if Array.exists ((>) 0) shape then raise Nyi_error; (* TODO *)
     let shape = Array.to_list shape in
     let xlen = length x.v in
     let len = List.fold_left ( * ) 1 shape in

@@ -49,7 +49,7 @@ let eval expr =
   let rec go x0 k = match x0 with
   | Lit x -> k x
   | Unop (Count, e) -> go e (V.count >> k)
-  | Unop (Flip, e) -> go e k
+  | Unop (Flip, e) -> go e k (* TODO *)
   | Unop (Enum, e) -> go e (V.enum >> k)
   | Unop (Minus, e) -> go e (V.neg >> k)
   | Unop (Rev, e) -> go e (V.rev >> k)
