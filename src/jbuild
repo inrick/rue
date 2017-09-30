@@ -1,0 +1,13 @@
+(jbuild_version 1)
+
+(executables
+  ((names (main test))
+   (flags (:standard -short-paths -safe-string))
+   (libraries ())))
+
+(ocamllex (lexer))
+(menhir ((modules (parser))))
+
+(alias
+  ((name runtest)
+   (action (setenv OCAMLRUNPARAM b (run ${exe:test.exe})))))

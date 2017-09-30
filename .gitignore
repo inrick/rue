@@ -1,6 +1,4 @@
 _build/
-main.native
-main.byte
+src/.merlin
 rue
-test.native
-test.byte
+rue.bc

@@ -1,2 +1,0 @@
-true: bin_annot, safe_string, short_paths, use_menhir
-<src>: include

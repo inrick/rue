@@ -48,4 +48,4 @@ Print evaluated expr
 Dependencies
 ============
 
-Requires `menhir`.
+Requires `jbuilder` and `menhir` to build.

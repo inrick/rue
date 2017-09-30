@@ -1,41 +1,36 @@
-OCB_FLAGS :=
-OCB := ocamlbuild $(OCB_FLAGS)
-
-TARGET := main
+TARGET := src/main
 BIN := rue
+
+BCONTEXT := _build/default
 
 .PHONY: all
 all: native
 
 .PHONY: doc
-doc:
-	$(OCB) src/rue.docdir/index.html
+doc: native
+	mkdir -p doc
+	ocamldoc -html -d doc -I $(BCONTEXT)/src/ src/*.ml{,i}
 
 .PHONY: clean
 clean:
-	$(OCB) -clean
-	rm -f $(BIN)
+	-rm -rf _build
+	-rm -rf doc
+	-rm -f $(BIN)
+	-rm -f $(BIN).bc
 
 .PHONY: native
 native:
-	$(OCB) $(TARGET).native
-	cp -aL $(TARGET).native $(BIN)
+	jbuilder build $(TARGET).exe
+	cp -aL $(BCONTEXT)/$(TARGET).exe $(BIN)
 
 .PHONY: byte
 byte:
-	$(OCB) $(TARGET).byte
-
-.PHONY: profile
-profile:
-	$(OCB) -tag profile $(TARGET).native
-
-.PHONY: debug
-debug:
-	$(OCB) -tag debug $(TARGET).byte
+	jbuilder build $(TARGET).bc
+	cp -aL $(BCONTEXT)/$(TARGET).bc $(BIN).bc
 
 .PHONY: test
 test:
-	$(OCB) -tag debug test.native && OCAMLRUNPARAM=b ./test.native
+	jbuilder runtest
 
 .PHONY: watch
 watch:
