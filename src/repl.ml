@@ -14,7 +14,7 @@ let run () =
   (* input handlers *)
   let eval_input = parse_string >> eval in
   let lex_input = lex_string in
-  let parse_input = parse_string >> Option.maybe "" Ast.String.of_expr in
+  let parse_input = parse_string >> Option.maybe "" Ast.show_expr in
   let handler = ref eval_input in
   let hook s =
     if String.length s > 0 && s.[0] = '\\' then

@@ -20,30 +20,28 @@ type expr =
   | Unop of unop * expr
   | Binop of expr * binop * expr
 
-module String = struct
-  let of_unop = function
-    | Count -> "#"
-    | Enum -> "!"
-    | Flip -> "+"
-    | Minus -> "-"
-    | Rev -> "|"
-    | Shape_of -> "^"
+let show_unop = function
+  | Count -> "#"
+  | Enum -> "!"
+  | Flip -> "+"
+  | Minus -> "-"
+  | Rev -> "|"
+  | Shape_of -> "^"
 
-  let of_binop = function
-    | Divide -> "%"
-    | Mult -> "*"
-    | Minus -> "-"
-    | Plus -> "+"
-    | Take -> "#"
+let show_binop = function
+  | Divide -> "%"
+  | Mult -> "*"
+  | Minus -> "-"
+  | Plus -> "+"
+  | Take -> "#"
 
-  let rec of_expr =
-    let open Printf in
-    function
-    | Lit x -> sprintf "Lit(%s)" (V.show x)
-    | Unop (op, e) -> sprintf "Unop(%s, %s)" (of_unop op) (of_expr e)
-    | Binop (e1, op, e2) ->
-        sprintf "Binop(%s, %s, %s)" (of_expr e1) (of_binop op) (of_expr e2)
-end
+let rec show_expr =
+  let open Printf in
+  function
+  | Lit x -> sprintf "Lit(%s)" (V.show x)
+  | Unop (op, e) -> sprintf "Unop(%s, %s)" (show_unop op) (show_expr e)
+  | Binop (e1, op, e2) ->
+      sprintf "Binop(%s, %s, %s)" (show_expr e1) (show_binop op) (show_expr e2)
 
 let eval expr =
   let rec go x0 k = match x0 with
