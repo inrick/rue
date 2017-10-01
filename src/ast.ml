@@ -7,6 +7,7 @@ type unop =
   | Minus
   | Rev
   | Shape_of
+  [@@deriving show {with_path = false}]
 
 type binop =
   | Mult
@@ -14,34 +15,13 @@ type binop =
   | Plus
   | Minus
   | Take
+  [@@deriving show {with_path = false}]
 
 type expr =
-  | Lit of V.t
+  | Lit of V.t [@printer fun fmt v -> fprintf fmt "Lit(%s)" (V.show v)]
   | Unop of unop * expr
   | Binop of expr * binop * expr
-
-let show_unop = function
-  | Count -> "#"
-  | Enum -> "!"
-  | Flip -> "+"
-  | Minus -> "-"
-  | Rev -> "|"
-  | Shape_of -> "^"
-
-let show_binop = function
-  | Divide -> "%"
-  | Mult -> "*"
-  | Minus -> "-"
-  | Plus -> "+"
-  | Take -> "#"
-
-let rec show_expr =
-  let open Printf in
-  function
-  | Lit x -> sprintf "Lit(%s)" (V.show x)
-  | Unop (op, e) -> sprintf "Unop(%s, %s)" (show_unop op) (show_expr e)
-  | Binop (e1, op, e2) ->
-      sprintf "Binop(%s, %s, %s)" (show_expr e1) (show_binop op) (show_expr e2)
+  [@@deriving show {with_path = false}]
 
 let eval expr =
   let rec go x0 k = match x0 with

@@ -3,7 +3,8 @@
 (executables
   ((names (main test))
    (flags (:standard -short-paths -safe-string))
-   (libraries ())))
+   (libraries ())
+   (preprocess (pps (ppx_deriving.show)))))
 
 (ocamllex (lexer))
 (menhir ((modules (parser))))
